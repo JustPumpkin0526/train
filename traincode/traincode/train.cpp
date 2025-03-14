@@ -6,23 +6,23 @@ using namespace cv;
 
 int main()
 {
-    VideoCapture cap("train (1).mp4");
+    VideoCapture cap("train (2).mp4");
 
-    Mat src;
-    Mat dst;
-    cap >> src;
+    Mat img;
+    Mat gray_img;
+    cap >> img;
 
-    cvtColor(src, dst, COLOR_RGB2GRAY);
+    cvtColor(img, gray_img, COLOR_RGB2GRAY);
 
-    Mat dst_gaus;
-    GaussianBlur(dst, dst_gaus, Size(), 1, 1);
+    Mat img_gaus;
+    GaussianBlur(gray_img, img_gaus, Size(), 1, 1);
 
-    Mat dst_canny;
-    Canny(dst_gaus, dst_canny, 20, 100);
+    Mat img_canny;
+    Canny(img_gaus, img_canny, 20, 100);
 
     vector<vector<Point>> contours;
     vector<Vec4i> hierarchy;
-    findContours(dst_canny, contours, hierarchy, RETR_EXTERNAL, CHAIN_APPROX_SIMPLE);
+    findContours(img_canny, contours, hierarchy, RETR_EXTERNAL, CHAIN_APPROX_SIMPLE);
 
     double maxLength = 0;
     Rect longestBox;
@@ -35,14 +35,22 @@ int main()
     }
 
     Mat result;
-    cvtColor(dst_canny, result, COLOR_GRAY2BGR);
+    cvtColor(img_canny, result, COLOR_GRAY2BGR);
     if (maxLength > 0) {
         rectangle(result, longestBox, Scalar(0, 255, 0), 2);
     }
 
-    imshow("dst_gaus", result);
+    imshow("result", result);
 
     waitKey(0);
 
     return 0;
 }
+
+
+
+
+
+
+
+
